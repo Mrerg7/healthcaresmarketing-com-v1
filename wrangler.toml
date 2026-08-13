@@ -1,0 +1,9 @@
+# Cloudflare Workers Static Assets — pure static site
+# No Worker script / no adapter required
+name = "healthcaresmarketing-com-v1"
+compatibility_date = "2026-08-11"
+
+[assets]
+directory = "./dist"
+# Optional: handle SPA-style 404s if needed later
+# not_found_handling = "404-page"

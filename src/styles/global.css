@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+/* Custom theme tokens for mystic aesthetic */
+@theme {
+  --color-void: #050505;
+  --color-mist: #0a0a0f;
+  --color-ember: #1a1210;
+  --color-ghost: #e8e4df;
+  --color-whisper: #a39e97;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Base */
+html {
+  @apply bg-[var(--color-void)] text-[var(--color-ghost)] antialiased;
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply min-h-dvh overflow-x-hidden;
+}
+
+/* Mystic image effects */
+@keyframes fade-in-slow {
+  0% {
+    opacity: 0;
+    transform: scale(1.08);
+    filter: brightness(0.4) contrast(1.2) saturate(0.6);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(0.85) contrast(1.05) saturate(0.75);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(-2%, -1%) scale(1.05);
+  }
+  50% {
+    transform: translate(1%, 2%) scale(1.08);
+  }
+  100% {
+    transform: translate(-2%, -1%) scale(1.05);
+  }
+}
+
+@keyframes soft-fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mystic-image {
+  animation: fade-in-slow 4.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.fog-layer {
+  animation: pulse-glow 9s ease-in-out infinite;
+}
+
+.drift-layer {
+  animation: drift 28s ease-in-out infinite;
+}
+
+.cta-reveal {
+  animation: soft-fade 2.2s ease-out 2.8s both;
+}
+
+.footer-reveal {
+  animation: soft-fade 1.8s ease-out 4s both;
+}
+
+/* Subtle noise texture via CSS (no external asset) */
+.noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px;
+  pointer-events: none;
+}
+
+/* Selection */
+::selection {
+  background: rgba(180, 160, 140, 0.25);
+  color: var(--color-ghost);
+}

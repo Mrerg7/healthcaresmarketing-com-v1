@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const IMAGE =
+  'https://imagedelivery.net/-sPAUAWeA405NiWJ0SNIQA/bc3af191-a2b4-437a-bf46-8de26a24db00/public';
+---
+
+<Layout title="Healthcares Marketing" description="">
+  <main class="relative min-h-dvh w-full overflow-hidden bg-[var(--color-void)]">
+    <!-- Full-bleed mystic image -->
+    <div class="absolute inset-0 overflow-hidden">
+      <img
+        src={IMAGE}
+        alt=""
+        width="1920"
+        height="1080"
+        decoding="async"
+        fetchpriority="high"
+        class="mystic-image absolute inset-0 h-full w-full object-cover object-center drift-layer select-none"
+        style="will-change: transform, opacity, filter;"
+      />
+    </div>
+
+    <!-- Layered atmospheric overlays -->
+    <div
+      class="pointer-events-none absolute inset-0 fog-layer"
+      style="background: radial-gradient(ellipse 80% 70% at 50% 40%, transparent 0%, rgba(5,5,8,0.55) 55%, rgba(5,5,8,0.92) 100%);"
+      aria-hidden="true"
+    ></div>
+
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to bottom, rgba(5,5,8,0.65) 0%, transparent 28%, transparent 62%, rgba(5,5,8,0.85) 100%);"
+      aria-hidden="true"
+    ></div>
+
+    <div
+      class="pointer-events-none absolute inset-0 opacity-40"
+      style="background: radial-gradient(circle at 30% 20%, rgba(90,70,50,0.18), transparent 45%), radial-gradient(circle at 75% 70%, rgba(40,30,50,0.22), transparent 40%);"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Noise grain -->
+    <div class="noise absolute inset-0 opacity-[0.07]" aria-hidden="true"></div>
+
+    <!-- Subtle vignette edge -->
+    <div
+      class="pointer-events-none absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.75)]"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Single acquisition CTA -->
+    <div class="cta-reveal absolute inset-x-0 bottom-[18%] z-20 flex justify-center px-6 sm:bottom-[16%]">
+      <a
+        href="mailto:sales@desertrich.com"
+        class="group relative inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-7 py-3 text-[11px] font-medium tracking-[0.28em] uppercase text-[var(--color-whisper)] backdrop-blur-md transition-all duration-700 hover:border-white/25 hover:bg-black/45 hover:text-[var(--color-ghost)] hover:shadow-[0_0_40px_rgba(180,160,140,0.15)] focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
+        aria-label="Contact sales"
+      >
+        <span class="relative z-10">Inquire</span>
+        <span
+          class="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+          aria-hidden="true"
+        ></span>
+      </a>
+    </div>
+
+    <!-- Footer disclaimer -->
+    <footer
+      class="footer-reveal absolute inset-x-0 bottom-0 z-30 px-5 pb-5 pt-8 sm:px-8 sm:pb-6"
+    >
+      <p
+        class="mx-auto max-w-2xl text-center text-[9px] leading-relaxed tracking-wide text-white/25 sm:text-[10px]"
+      >
+        This website is for demonstration and informational purposes only. It does not constitute an
+        offer of services, a commitment to deploy, or a guarantee of outcomes. All statistics,
+        projections, and references to specific technologies are based on publicly available
+        information as of the date shown and are subject to change.
+      </p>
+    </footer>
+  </main>
+</Layout>
