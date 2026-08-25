@@ -31,23 +31,16 @@ npm run deploy
 npx wrangler deploy
 ```
 
-`wrangler.toml` is configured for assets-only:
-
-```toml
-[assets]
-directory = "./dist"
-```
-
-No Worker script or `@astrojs/cloudflare` adapter is required.
+`wrangler.toml` serves Static Assets with a small Worker that 301-redirects `www` → apex and returns a real `404.html` for missing paths.
 
 ## Domain
 
 Production target: **https://healthcaresmarketing.com**
 
-CTA routes to: `sales@desertrich.com`
+CTA routes to: `erg@healthcaresmarketing.com`
 
 ## Notes
 
-- Fully static, edge-cached via Cloudflare.
-- Mobile-first, full-viewport image with atmospheric fades, vignette, grain, and subtle drift.
-- No body copy — visual + single acquisition CTA + required disclaimer footer.
+- Fully static assets, edge-cached via Cloudflare; Worker only handles host canonicalization.
+- Mobile-first, full-viewport image with brand, supporting line, CTA, and disclaimer.
+- SEO: absolute canonical to apex HTTPS, meta description, custom 404, sitemap + robots.txt.

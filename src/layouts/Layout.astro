@@ -8,16 +8,20 @@ interface Props {
   noindex?: boolean;
 }
 
+const DEFAULT_DESCRIPTION =
+  'Healthcares Marketing helps healthcare organizations grow with clear strategy, patient acquisition, and brand presence.';
+
 const {
   title = 'Healthcares Marketing',
-  description = '',
+  description = DEFAULT_DESCRIPTION,
   image = 'https://imagedelivery.net/-sPAUAWeA405NiWJ0SNIQA/bc3af191-a2b4-437a-bf46-8de26a24db00/public',
   noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const siteName = 'healthcaresmarketing.com';
+const siteName = 'Healthcares Marketing';
 const ogImage = image;
+const metaDescription = description.trim() || DEFAULT_DESCRIPTION;
 ---
 
 <!doctype html>
@@ -29,13 +33,17 @@ const ogImage = image;
 
     <!-- Primary -->
     <title>{title}</title>
-    <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="description" content={metaDescription} />
+    <meta name="google-site-verification" content="IHzPomtaTymT5ZCVpVVr219HmHd9sCYs7zdJT4rG7R0" />
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <meta name="robots" content="index, follow" />
+    )}
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
 
     <!-- Theme -->
@@ -46,7 +54,7 @@ const ogImage = image;
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={metaDescription} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
@@ -57,7 +65,7 @@ const ogImage = image;
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content="Healthcares Marketing" />
 
@@ -67,13 +75,13 @@ const ogImage = image;
       "@type": "WebSite",
       "name": siteName,
       "url": "https://healthcaresmarketing.com",
-      "description": description || "Healthcares Marketing",
+      "description": metaDescription,
       "image": ogImage,
       "publisher": {
         "@type": "Organization",
         "name": "Healthcares Marketing",
         "url": "https://healthcaresmarketing.com",
-        "email": "sales@desertrich.com"
+        "email": "erg@healthcaresmarketing.com"
       }
     })} />
   </head>

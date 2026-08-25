@@ -7,9 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://healthcaresmarketing.com',
   output: 'static',
+  trailingSlash: 'always',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },
-  // Pure static — no adapter required for Cloudflare Workers Static Assets
 });

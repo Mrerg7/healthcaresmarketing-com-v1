@@ -1,0 +1,2 @@
+# Prefer sitemap index URL used by robots.txt
+/sitemap.xml /sitemap-index.xml 301

@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Page not found — Healthcares Marketing"
+  description="The page you requested could not be found on healthcaresmarketing.com."
+  noindex={true}
+>
+  <main class="flex min-h-dvh flex-col items-center justify-center bg-[var(--color-void)] px-6 text-center">
+    <p class="text-sm tracking-[0.2em] uppercase text-[var(--color-whisper)]">404</p>
+    <h1 class="mt-4 text-3xl font-medium tracking-tight text-[var(--color-ghost)] sm:text-4xl">
+      Page not found
+    </h1>
+    <p class="mt-4 max-w-md text-base leading-relaxed text-[var(--color-whisper)]">
+      That URL is not part of this site. Return to the homepage to continue.
+    </p>
+    <a
+      href="/"
+      class="mt-10 inline-flex items-center rounded-full border border-white/15 px-7 py-3 text-sm font-medium tracking-[0.2em] uppercase text-[var(--color-ghost)] transition-colors hover:border-white/30 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
+    >
+      Home
+    </a>
+  </main>
+</Layout>
