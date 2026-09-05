@@ -8,11 +8,6 @@ interface Env {
   ASSETS: Fetcher;
 }
 
-function isAssetPath(pathname: string): boolean {
-  const last = pathname.split('/').pop() ?? '';
-  return last.includes('.') && !/\.html?$/i.test(last);
-}
-
 function canonicalLocation(requestUrl: URL, pathname: string): string {
   const next = new URL(requestUrl.toString());
   next.protocol = 'https:';
@@ -67,11 +62,8 @@ export default {
       needsRedirect = true;
     }
 
-    // Prefer trailing-slash HTML URLs (matches Astro trailingSlash: 'always').
-    if (!isAssetPath(pathname) && pathname !== '/' && !pathname.endsWith('/')) {
-      pathname = `${pathname}/`;
-      needsRedirect = true;
-    }
+    // Do not invent trailing-slash 301s for unknown paths (that delays real 404s).
+    // Existing HTML slash fixes come from ASSETS and are upgraded 307→301 below.
 
     if (needsRedirect) {
       return Response.redirect(canonicalLocation(url, pathname), 301);
