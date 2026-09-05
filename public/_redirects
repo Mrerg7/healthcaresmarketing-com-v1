@@ -1,2 +1,6 @@
 # Prefer sitemap index URL used by robots.txt
 /sitemap.xml /sitemap-index.xml 301
+
+# Permanent collapses for duplicate HTML entry points (backup to Worker 301s)
+/index.html / 301
+/index / 301

@@ -38,9 +38,11 @@ const metaDescription = description.trim() || DEFAULT_DESCRIPTION;
     {noindex ? (
       <meta name="robots" content="noindex, nofollow" />
     ) : (
-      <meta name="robots" content="index, follow" />
+      <>
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={canonicalURL} />
+      </>
     )}
-    <link rel="canonical" href={canonicalURL} />
 
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -52,7 +54,7 @@ const metaDescription = description.trim() || DEFAULT_DESCRIPTION;
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:url" content={noindex ? 'https://healthcaresmarketing.com/' : canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={metaDescription} />
     <meta property="og:site_name" content={siteName} />
@@ -69,21 +71,23 @@ const metaDescription = description.trim() || DEFAULT_DESCRIPTION;
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content="Healthcares Marketing" />
 
-    <!-- Structured Data -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": siteName,
-      "url": "https://healthcaresmarketing.com",
-      "description": metaDescription,
-      "image": ogImage,
-      "publisher": {
-        "@type": "Organization",
-        "name": "Healthcares Marketing",
+    {/* Skip WebSite JSON-LD on error pages so /404 is not treated as an alternate homepage */}
+    {!noindex && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": siteName,
         "url": "https://healthcaresmarketing.com",
-        "email": "erg@healthcaresmarketing.com"
-      }
-    })} />
+        "description": metaDescription,
+        "image": ogImage,
+        "publisher": {
+          "@type": "Organization",
+          "name": "Healthcares Marketing",
+          "url": "https://healthcaresmarketing.com",
+          "email": "erg@healthcaresmarketing.com"
+        }
+      })} />
+    )}
   </head>
   <body class="bg-[var(--color-void)] text-[var(--color-ghost)]">
     <slot />
