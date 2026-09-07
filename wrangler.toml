@@ -12,8 +12,10 @@ binding = "ASSETS"
 run_worker_first = true
 # Serve custom 404.html with a real 404 status (avoids soft 404 / blank errors)
 not_found_handling = "404-page"
-# Align HTML URLs with canonical trailing slash
-html_handling = "force-trailing-slash"
+# Disable Cloudflare HTML redirects (/index.html→/, /404.html→/404) that
+# Search Console reports as "Page with redirect". The Worker serves "/" from
+# index.html and returns a real 404 for the 404 document paths.
+html_handling = "none"
 
 [[routes]]
 pattern = "healthcaresmarketing.com"

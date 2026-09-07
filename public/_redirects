@@ -1,6 +1,4 @@
-# Prefer sitemap index URL used by robots.txt
-/sitemap.xml /sitemap-index.xml 301
-
-# Permanent collapses for duplicate HTML entry points (backup to Worker 301s)
-/index.html / 301
-/index / 301
+# Intentionally empty.
+# Host/path canonicalization and sitemap rewriting are handled in src/worker.ts
+# so Cloudflare Static Assets does not emit extra 301s that GSC flags as
+# "Page with redirect".
