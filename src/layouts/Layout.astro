@@ -8,24 +8,24 @@ interface Props {
   noindex?: boolean;
 }
 
+const DEFAULT_TITLE = 'Healthcare Marketing Agency | Patient Growth | Healthcares Marketing';
 const DEFAULT_DESCRIPTION =
-  'Healthcares Marketing helps healthcare organizations grow with clear strategy, patient acquisition, and brand presence.';
+  'Healthcares Marketing helps clinics, practices & healthcare brands grow with patient acquisition, local SEO, paid ads, and trusted brand presence. Get a free growth plan.';
 
 const {
-  title = 'Healthcares Marketing',
+  title = DEFAULT_TITLE,
   description = DEFAULT_DESCRIPTION,
   image = 'https://imagedelivery.net/-sPAUAWeA405NiWJ0SNIQA/bc3af191-a2b4-437a-bf46-8de26a24db00/public',
   noindex = false,
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL('/', 'https://healthcaresmarketing.com/');
 const siteName = 'Healthcares Marketing';
-const ogImage = image;
-const metaDescription = description.trim() || DEFAULT_DESCRIPTION;
+const metaDescription = (description.trim() || DEFAULT_DESCRIPTION).slice(0, 160);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -39,18 +39,39 @@ const metaDescription = description.trim() || DEFAULT_DESCRIPTION;
       <meta name="robots" content="noindex, nofollow" />
     ) : (
       <>
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
         <link rel="canonical" href={canonicalURL} />
       </>
     )}
 
+    <!-- Performance: early connections (free-plan friendly, no extra libs) -->
+    <link rel="preconnect" href="https://imagedelivery.net" crossorigin />
+    <link rel="dns-prefetch" href="https://imagedelivery.net" />
+    <link rel="preconnect" href="https://static.cloudflareinsights.com" />
+    <link
+      rel="preload"
+      as="image"
+      href="https://imagedelivery.net/-sPAUAWeA405NiWJ0SNIQA/bc3af191-a2b4-437a-bf46-8de26a24db00/public"
+      fetchpriority="high"
+    />
+
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Healthcares%20Marketing%22%2C%22short_name%22%3A%22Healthcares%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22%2F%22%7D" />
 
     <!-- Theme -->
-    <meta name="theme-color" content="#050505" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7fafc" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('hcm-theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch (e) {}
+    </script>
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -58,38 +79,52 @@ const metaDescription = description.trim() || DEFAULT_DESCRIPTION;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={metaDescription} />
     <meta property="og:site_name" content={siteName} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={image} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Healthcares Marketing" />
+    <meta property="og:image:alt" content="Healthcares Marketing — healthcare growth partner" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={metaDescription} />
-    <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content="Healthcares Marketing" />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content="Healthcares Marketing — healthcare growth partner" />
 
-    {/* Skip WebSite JSON-LD on error pages so /404 is not treated as an alternate homepage */}
+    {/* Structured data: WebSite + Organization (kept off error pages) */}
     {!noindex && (
       <script type="application/ld+json" set:html={JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": siteName,
-        "url": "https://healthcaresmarketing.com/",
-        "description": metaDescription,
-        "image": ogImage,
-        "publisher": {
-          "@type": "Organization",
-          "name": "Healthcares Marketing",
-          "url": "https://healthcaresmarketing.com/",
-          "email": "erg@healthcaresmarketing.com"
-        }
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://healthcaresmarketing.com/#website",
+            "name": siteName,
+            "url": "https://healthcaresmarketing.com/",
+            "description": metaDescription,
+            "image": image,
+            "publisher": { "@id": "https://healthcaresmarketing.com/#org" }
+          },
+          {
+            "@type": ["Organization", "ProfessionalService"],
+            "@id": "https://healthcaresmarketing.com/#org",
+            "name": "Healthcares Marketing",
+            "url": "https://healthcaresmarketing.com/",
+            "description": metaDescription,
+            "image": image,
+            "email": "erg@healthcaresmarketing.com",
+            "areaServed": "US",
+            "priceRange": "$$",
+            "knowsAbout": ["Healthcare Marketing", "Patient Acquisition", "Local SEO", "Paid Search", "Brand Strategy", "Reputation Management"],
+            "sameAs": []
+          }
+        ]
       })} />
     )}
   </head>
-  <body class="bg-[var(--color-void)] text-[var(--color-ghost)]">
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     <slot />
   </body>
 </html>

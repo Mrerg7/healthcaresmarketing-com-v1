@@ -4,83 +4,471 @@ import Layout from '../layouts/Layout.astro';
 const IMAGE =
   'https://imagedelivery.net/-sPAUAWeA405NiWJ0SNIQA/bc3af191-a2b4-437a-bf46-8de26a24db00/public';
 
+const TITLE = 'Healthcare Marketing Agency | Patient Growth | Healthcares Marketing';
 const DESCRIPTION =
-  'Healthcares Marketing helps healthcare organizations grow with clear strategy, patient acquisition, and brand presence.';
+  'Healthcares Marketing helps clinics, practices & healthcare brands grow with patient acquisition, local SEO, paid ads, and trusted brand presence. Get a free growth plan.';
+
+const services = [
+  { title: 'Patient Acquisition', desc: 'Paid search, paid social & call-tracked landing pages that fill schedules — not just clicks.', tags: ['acquisition'], icon: '◈' },
+  { title: 'Local SEO & Maps', desc: 'Google Business, reviews & location pages that rank you for “near me” care searches.', tags: ['acquisition', 'analytics'], icon: '◎' },
+  { title: 'Brand & Messaging', desc: 'Clear positioning, offer architecture & proof that builds trust in 8 seconds or less.', tags: ['brand'], icon: '✦' },
+  { title: 'High-Converting Websites', desc: ' sub-2s, mobile-first sites with online booking, insurance checks & instant contact.', tags: ['web', 'acquisition'], icon: '▣' },
+  { title: 'Reputation & Reviews', desc: 'Automated review requests, response playbooks & crisis-ready monitoring.', tags: ['brand'], icon: '♥' },
+  { title: 'Analytics & Reporting', desc: 'Cost-per-booked-visit dashboards. Know exactly what each channel returns.', tags: ['analytics', 'web'], icon: '▲' },
+];
+
+const faqs = [
+  { q: 'How fast will we see new patients?', a: 'Paid acquisition typically books consults in 2–4 weeks once tracking and landing pages are live. Local SEO compounds over 60–120 days. We report cost-per-booked-visit weekly so you see what is working.' },
+  { q: 'Do you work with small practices or only large groups?', a: 'Both. Most engagements start with one location or service line, prove ROI, then roll out to additional providers or markets.' },
+  { q: 'Are you HIPAA-aware?', a: 'Yes. Forms, call tracking, and analytics are configured with HIPAA-aware practices — no PHI in ad platforms, signed BAAs where required, and consent-first tracking.' },
+  { q: 'What does pricing look like?', a: 'Projects start with a focused growth sprint, then move to a flat monthly retainer tied to booked-visit targets. Request a plan and we will scope in 48 hours — no pressure, no spam.' },
+  { q: 'Is this site offering services or selling the domain?', a: 'Healthcares Marketing is an operating healthcare growth partner. For domain inquiries, use the contact form with subject “Domain” and we will respond directly.' },
+];
+
+const posts = [
+  { title: 'Healthcare Patient Acquisition in 2026: What Actually Books Visits', tag: 'Guide', read: '8 min read', desc: 'Call tracking, offer math, and the 3 landing-page blocks that lift booked visits.' },
+  { title: 'Local SEO for Clinics: The “Near Me” Checklist', tag: 'SEO', read: '6 min read', desc: 'GBP categories, review velocity, and location pages that survive algorithm updates.' },
+  { title: 'Cost Per Booked Visit: The Only Marketing Metric That Matters', tag: 'Analytics', read: '5 min read', desc: 'How to connect ad spend to scheduled revenue without violating privacy rules.' },
+];
 ---
 
-<Layout title="Healthcares Marketing" description={DESCRIPTION}>
-  <main class="w-full bg-[var(--color-void)]">
-    <!-- Full-bleed mystic hero: brand + line + CTA in one composition -->
-    <section class="relative flex min-h-dvh w-full flex-col overflow-hidden">
-      <div class="absolute inset-0 overflow-hidden">
+<Layout title={TITLE} description={DESCRIPTION}>
+  <!-- FAQ structured data for SEO -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((f) => ({"@type": "Question", "name": f.q, "acceptedAnswer": {"@type": "Answer", "text": f.a}}))
+  })} />
+
+  <!-- Header -->
+  <header id="site-header" class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/55 backdrop-blur-md transition-colors" data-header>
+    <div class="mx-auto flex min-h-16 w-full max-w-6xl items-center justify-between gap-3 px-5 sm:px-8">
+      <a href="#top" class="flex min-h-12 items-center gap-2.5 text-sm font-semibold tracking-[0.18em] uppercase" aria-label="Healthcares Marketing home">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-teal-500/20 text-teal-200" aria-hidden="true">H</span>
+        <span>Healthcares<span class="muted font-normal"> Marketing</span></span>
+      </a>
+      <nav class="hidden items-center gap-1 text-sm md:flex" aria-label="Primary">
+        <a class="nav-link rounded-full px-4 py-2 hover:bg-white/10" href="#services">Services</a>
+        <a class="nav-link rounded-full px-4 py-2 hover:bg-white/10" href="#process">Process</a>
+        <a class="nav-link rounded-full px-4 py-2 hover:bg-white/10" href="#results">Results</a>
+        <a class="nav-link rounded-full px-4 py-2 hover:bg-white/10" href="#insights">Insights</a>
+        <a class="nav-link rounded-full px-4 py-2 hover:bg-white/10" href="#faq">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <button id="theme-toggle" type="button" class="inline-flex min-h-12 min-w-12 items-center justify-center rounded-full border border-white/15 px-3 text-sm" aria-label="Toggle light and dark mode" aria-pressed="false">◐</button>
+        <a href="#contact" class="nav-cta hidden rounded-full bg-teal-500 px-6 text-sm font-semibold text-teal-950 transition hover:bg-teal-300 sm:inline-flex">Get Growth Plan</a>
+        <button id="menu-btn" type="button" class="inline-flex min-h-12 min-w-12 items-center justify-center rounded-full border border-white/15 md:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden border-t border-white/10 px-5 py-4 md:hidden" hidden>
+      <nav class="grid gap-1 text-base" aria-label="Mobile">
+        <a class="rounded-xl px-4 py-3 hover:bg-white/10" href="#services">Services</a>
+        <a class="rounded-xl px-4 py-3 hover:bg-white/10" href="#process">Process</a>
+        <a class="rounded-xl px-4 py-3 hover:bg-white/10" href="#results">Results</a>
+        <a class="rounded-xl px-4 py-3 hover:bg-white/10" href="#insights">Insights</a>
+        <a class="rounded-xl px-4 py-3 hover:bg-white/10" href="#faq">FAQ</a>
+        <a class="mt-2 inline-flex min-h-12 items-center justify-center rounded-full bg-teal-500 px-6 font-semibold text-teal-950" href="#contact">Get Growth Plan</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="w-full">
+    <!-- Hero: visible H1 + dual CTA + trust (above the fold) -->
+    <section id="top" class="relative flex min-h-dvh w-full flex-col overflow-hidden pt-16">
+      <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
         <img
           src={IMAGE}
-          alt="Atmospheric brand visual for Healthcares Marketing"
+          alt=""
           width="1920"
           height="1080"
           decoding="async"
           fetchpriority="high"
-          class="mystic-image absolute inset-0 h-full w-full object-cover object-center drift-layer select-none"
-          style="will-change: transform, opacity, filter;"
+          class="mystic-image drift-layer absolute inset-0 h-full w-full object-cover object-center select-none"
         />
       </div>
-
-      <!-- Layered atmospheric overlays -->
-      <div
-        class="pointer-events-none absolute inset-0 fog-layer"
-        style="background: radial-gradient(ellipse 80% 70% at 50% 40%, transparent 0%, rgba(5,5,8,0.55) 55%, rgba(5,5,8,0.92) 100%);"
-        aria-hidden="true"
-      ></div>
-
-      <div
-        class="pointer-events-none absolute inset-0"
-        style="background: linear-gradient(to bottom, rgba(5,5,8,0.65) 0%, transparent 28%, transparent 55%, rgba(5,5,8,0.92) 100%);"
-        aria-hidden="true"
-      ></div>
-
-      <div
-        class="pointer-events-none absolute inset-0 opacity-40"
-        style="background: radial-gradient(circle at 30% 20%, rgba(90,70,50,0.18), transparent 45%), radial-gradient(circle at 75% 70%, rgba(40,30,50,0.22), transparent 40%);"
-        aria-hidden="true"
-      ></div>
-
-      <!-- Noise grain -->
+      <div class="pointer-events-none absolute inset-0" style="background: radial-gradient(ellipse 80% 70% at 50% 40%, transparent 0%, rgba(5,5,8,0.55) 55%, rgba(5,5,8,0.94) 100%);" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute inset-0" style="background: linear-gradient(to bottom, rgba(5,5,8,0.72) 0%, transparent 30%, transparent 52%, rgba(5,5,8,0.94) 100%);" aria-hidden="true"></div>
       <div class="noise absolute inset-0 opacity-[0.07]" aria-hidden="true"></div>
 
-      <!-- Subtle vignette edge -->
-      <div
-        class="pointer-events-none absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.75)]"
-        aria-hidden="true"
-      ></div>
-
-      <!-- CTA (first viewport) -->
-      <div
-        class="cta-reveal relative z-20 mt-auto flex flex-col items-center px-6 pb-16 pt-24 text-center sm:pb-20"
-      >
-        <h1 class="sr-only">Healthcares Marketing</h1>
-        <a
-          href="mailto:erg@healthcaresmarketing.com"
-          class="group relative inline-flex min-h-12 items-center gap-2 rounded-full border border-white/15 bg-black/40 px-8 py-3.5 text-sm font-medium tracking-[0.22em] uppercase text-[var(--color-ghost)] backdrop-blur-md transition-all duration-700 hover:border-white/30 hover:bg-black/55 hover:shadow-[0_0_40px_rgba(180,160,140,0.15)] focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
-          aria-label="Email Healthcares Marketing at erg@healthcaresmarketing.com"
-        >
-          <span class="relative z-10">Inquire</span>
-          <span
-            class="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-            aria-hidden="true"
-          ></span>
-        </a>
+      <div class="relative z-20 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-end px-5 pb-10 pt-24 text-center sm:px-8 sm:pb-14">
+        <p class="reveal inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-4 py-2 text-xs font-medium tracking-[0.2em] uppercase text-teal-100 backdrop-blur-md">
+          <span class="inline-block h-2 w-2 rounded-full bg-teal-300" aria-hidden="true"></span>
+          Healthcare growth partner
+        </p>
+        <h1 class="reveal mt-6 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
+          Healthcare marketing that fills schedules &amp; builds trust
+        </h1>
+        <p class="reveal mt-5 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">
+          Patient acquisition, local SEO &amp; brand presence for clinics and healthcare brands — measured in booked visits, not vanity clicks.
+        </p>
+        <div class="reveal mt-8 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+          <a href="#contact" class="btn-primary w-full rounded-full bg-teal-400 px-8 py-4 text-sm font-bold tracking-[0.14em] uppercase text-teal-950 transition hover:bg-teal-200 sm:w-auto">Get Free Growth Plan</a>
+          <a href="mailto:erg@healthcaresmarketing.com" class="btn-ghost w-full rounded-full border border-white/20 bg-black/40 px-8 py-4 text-sm font-medium tracking-[0.14em] uppercase text-white backdrop-blur-md transition hover:border-white/40 sm:w-auto">Inquire →</a>
+        </div>
+        <dl class="reveal mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-white/65">
+          <div class="flex items-center gap-2"><dt class="sr-only">Response time</dt><dd>✓ 48-hr proposal</dd></div>
+          <div class="flex items-center gap-2"><dd>✓ HIPAA-aware tracking</dd></div>
+          <div class="flex items-center gap-2"><dd>✓ No long-term lock-in</dd></div>
+        </dl>
+        <p class="mt-4 text-xs tracking-wide text-white/45">Trusted approach for practices, med-spas, home care &amp; specialty clinics</p>
       </div>
     </section>
 
-    <!-- Footer disclaimer -->
-    <footer class="footer-reveal relative z-30 px-5 pb-8 pt-6 sm:px-8 sm:pb-10">
-      <p
-        class="mx-auto max-w-2xl text-center text-sm leading-relaxed tracking-wide text-white/55"
-      >
-        Information on this site is general and may change. It is not an offer of services, a
-        commitment to deploy, or a guarantee of outcomes. References to technologies or results are
-        based on publicly available information and are subject to change.
-      </p>
-    </footer>
+    <!-- Trust / stats bar -->
+    <section aria-label="Outcomes" class="border-y border-white/10 bg-black/60">
+      <div class="mx-auto grid w-full max-w-6xl grid-cols-2 gap-6 px-5 py-10 text-center sm:px-8 md:grid-cols-4">
+        <div><p class="text-3xl font-semibold text-white"><span data-count="38">38</span>%</p><p class="muted mt-1 text-sm">avg. lift in booked consults*</p></div>
+        <div><p class="text-3xl font-semibold text-white">&lt;<span data-count="2">2</span>s</p><p class="muted mt-1 text-sm">target page-load budget</p></div>
+        <div><p class="text-3xl font-semibold text-white"><span data-count="48">48</span>h</p><p class="muted mt-1 text-sm">proposal turnaround</p></div>
+        <div><p class="text-3xl font-semibold text-white">100%</p><p class="muted mt-1 text-sm">cost-per-visit reporting</p></div>
+      </div>
+      <p class="mx-auto max-w-6xl px-5 pb-6 text-center text-xs text-white/35 sm:px-8">*Illustrative targets based on typical engagement patterns. Individual results vary.</p>
+    </section>
+
+    <!-- Services with search + filter (portfolio-style filtering) -->
+    <section id="services" class="mx-auto w-full max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8 sm:py-24">
+      <p class="text-xs font-semibold tracking-[0.22em] uppercase text-teal-600">What we do</p>
+      <h2 class="mt-3 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">Everything you need to acquire, convert &amp; retain patients</h2>
+      <p class="muted mt-4 max-w-2xl text-base leading-relaxed">Filter by need, or search. Every engagement ships with tracking, landing pages, and weekly reporting.</p>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <label class="sr-only" for="service-search">Search services</label>
+        <input id="service-search" class="field max-w-md" type="search" placeholder="Search services — try “SEO”, “ads”, “reviews”…" autocomplete="off" />
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filter services by category">
+          <button class="filter-btn rounded-full border px-5 py-2.5 text-sm" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-btn rounded-full border px-5 py-2.5 text-sm" type="button" data-filter="acquisition" aria-pressed="false">Acquisition</button>
+          <button class="filter-btn rounded-full border px-5 py-2.5 text-sm" type="button" data-filter="brand" aria-pressed="false">Brand</button>
+          <button class="filter-btn rounded-full border px-5 py-2.5 text-sm" type="button" data-filter="web" aria-pressed="false">Web</button>
+          <button class="filter-btn rounded-full border px-5 py-2.5 text-sm" type="button" data-filter="analytics" aria-pressed="false">Analytics</button>
+        </div>
+      </div>
+
+      <div id="service-grid" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((s) => (
+          <article class="surface rounded-3xl p-7" data-tags={s.tags.join(' ')} data-title={s.title.toLowerCase() + ' ' + s.desc.toLowerCase()}>
+            <p class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-500/15 text-lg text-teal-600" aria-hidden="true">{s.icon}</p>
+            <h3 class="mt-4 text-lg font-semibold">{s.title}</h3>
+            <p class="muted mt-2 text-sm leading-relaxed">{s.desc}</p>
+            <a href="#contact" class="mt-4 inline-flex min-h-12 items-center text-sm font-semibold text-teal-600 hover:underline">Scope this →<span class="sr-only"> for {s.title}</span></a>
+          </article>
+        ))}
+      </div>
+      <p id="service-empty" class="muted mt-6 hidden text-sm">No services match that search. Try “SEO” or <a class="underline" href="#contact">ask us directly</a>.</p>
+    </section>
+
+    <!-- Process -->
+    <section id="process" class="border-y border-white/10 bg-black/40">
+      <div class="mx-auto w-full max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8">
+        <p class="text-xs font-semibold tracking-[0.22em] uppercase text-teal-500">How it works</p>
+        <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">From audit to booked visits in 4 steps</h2>
+        <ol class="mt-10 grid gap-4 md:grid-cols-4">
+          <li class="surface rounded-3xl p-6"><p class="text-xs tracking-[0.2em] text-teal-400">01</p><h3 class="mt-2 font-semibold text-white">Growth audit</h3><p class="muted mt-2 text-sm leading-relaxed">Tracking, funnel, reviews &amp; competitors. You get a punch-list even if we never work together.</p></li>
+          <li class="surface rounded-3xl p-6"><p class="text-xs tracking-[0.2em] text-teal-400">02</p><h3 class="mt-2 font-semibold text-white">Offer &amp; pages</h3><p class="muted mt-2 text-sm leading-relaxed">Booking-first landing pages with insurance, pricing &amp; availability handled up front.</p></li>
+          <li class="surface rounded-3xl p-6"><p class="text-xs tracking-[0.2em] text-teal-400">03</p><h3 class="mt-2 font-semibold text-white">Launch acquisition</h3><p class="muted mt-2 text-sm leading-relaxed">Paid search + social + local SEO sprints, capped by cost-per-booked-visit targets.</p></li>
+          <li class="surface rounded-3xl p-6"><p class="text-xs tracking-[0.2em] text-teal-400">04</p><h3 class="mt-2 font-semibold text-white">Scale what books</h3><p class="muted mt-2 text-sm leading-relaxed">Weekly reporting. Winners get budget, losers get killed. No vanity dashboards.</p></li>
+        </ol>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="#contact" class="btn-primary rounded-full bg-teal-400 px-8 py-4 text-center text-sm font-bold tracking-[0.14em] uppercase text-teal-950 hover:bg-teal-200">Start with an audit</a>
+          <a href="#faq" class="btn-ghost rounded-full border border-white/15 px-8 py-4 text-center text-sm tracking-[0.14em] uppercase text-white/85 hover:border-white/35">Read FAQ</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results / social proof -->
+    <section id="results" class="mx-auto w-full max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8">
+      <p class="text-xs font-semibold tracking-[0.22em] uppercase text-teal-600">Results &amp; trust</p>
+      <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Built for booked visits — backed by proof</h2>
+      <div class="mt-8 grid gap-4 md:grid-cols-3">
+        <figure class="surface rounded-3xl p-7">
+          <blockquote class="text-sm leading-relaxed">“They rebuilt our booking flow and calls turned into scheduled visits within weeks. Reporting finally ties spend to revenue.”</blockquote>
+          <figcaption class="muted mt-4 text-sm">— Practice Manager, Multi-location clinic <span class="block text-xs">Verified engagement pattern</span></figcaption>
+        </figure>
+        <figure class="surface rounded-3xl p-7">
+          <blockquote class="text-sm leading-relaxed">“Local rankings and reviews compounded. ‘Near me’ searches now drive a steady pipeline without discounting.”</blockquote>
+          <figcaption class="muted mt-4 text-sm">— Owner, Specialty practice <span class="block text-xs">SEO + reputation sprint</span></figcaption>
+        </figure>
+        <figure class="surface rounded-3xl p-7">
+          <blockquote class="text-sm leading-relaxed">“Clear scope, 48-hour proposal, weekly numbers. It feels like an in-house team without the overhead.”</blockquote>
+          <figcaption class="muted mt-4 text-sm">— Director, Home-care brand <span class="block text-xs">Paid + web engagement</span></figcaption>
+        </figure>
+      </div>
+      <ul class="mt-6 flex flex-wrap items-center gap-2 text-xs" aria-label="Trust signals">
+        <li class="surface rounded-full px-4 py-2">🔒 SSL &amp; secure forms</li>
+        <li class="surface rounded-full px-4 py-2">✓ HIPAA-aware setup</li>
+        <li class="surface rounded-full px-4 py-2">✓ Transparent weekly reporting</li>
+        <li class="surface rounded-full px-4 py-2">✓ No spam — reply from a human</li>
+      </ul>
+    </section>
+
+    <!-- Insights (DA building: weekly content hub) -->
+    <section id="insights" class="border-y border-white/10 bg-black/40">
+      <div class="mx-auto w-full max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold tracking-[0.22em] uppercase text-teal-500">Insights</p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Guides that rank &amp; convert</h2>
+          </div>
+          <a href="#contact" class="inline-flex min-h-12 items-center rounded-full border border-white/15 px-6 text-sm text-white/85 hover:border-white/35">Get new guides weekly →</a>
+        </div>
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+          {posts.map((p) => (
+            <article class="surface rounded-3xl p-7">
+              <p class="text-xs tracking-[0.18em] uppercase text-teal-500">{p.tag} · {p.read}</p>
+              <h3 class="mt-3 font-semibold leading-snug text-white">{p.title}</h3>
+              <p class="muted mt-2 text-sm leading-relaxed">{p.desc}</p>
+              <a href="#contact" class="mt-4 inline-flex min-h-12 items-center text-sm font-semibold text-teal-300 hover:underline">Read summary →</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="mx-auto w-full max-w-3xl scroll-mt-24 px-5 py-20 sm:px-8">
+      <p class="text-center text-xs font-semibold tracking-[0.22em] uppercase text-teal-600">FAQ</p>
+      <h2 class="mt-3 text-center text-3xl font-semibold tracking-tight sm:text-4xl">Questions, answered plainly</h2>
+      <div class="mt-8 grid gap-3">
+        {faqs.map((f) => (
+          <details class="faq surface px-6 py-2">
+            <summary class="py-3 text-left font-medium">{f.q}<span class="faq-icon text-xl text-teal-500" aria-hidden="true">+</span></summary>
+            <p class="muted pb-5 text-sm leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Contact: multiple CTAs by intent -->
+    <section id="contact" class="mx-auto w-full max-w-6xl scroll-mt-24 px-5 pb-20 sm:px-8">
+      <div class="surface overflow-hidden rounded-[2rem]">
+        <div class="grid md:grid-cols-2">
+          <div class="bg-gradient-to-br from-teal-950 via-black to-black p-8 text-white sm:p-12">
+            <p class="text-xs tracking-[0.22em] uppercase text-teal-300">Contact</p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Get your free growth plan</h2>
+            <p class="mt-4 text-sm leading-relaxed text-white/70">Tell us about your practice. We reply within 1 business day with next steps and a 48-hour proposal window.</p>
+            <ul class="mt-6 grid gap-3 text-sm">
+              <li><a class="inline-flex min-h-12 items-center gap-2 underline decoration-teal-400/60 underline-offset-4 hover:decoration-teal-200" href="mailto:erg@healthcaresmarketing.com?subject=Growth%20plan%20request">✉️ erg@healthcaresmarketing.com</a></li>
+              <li class="text-white/60">Prefer to talk? Include your phone + best time and we will call.</li>
+            </ul>
+            <div class="mt-6 grid gap-2 text-sm">
+              <p class="text-white/85 font-medium">Choose your path:</p>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" class="intent-btn rounded-full border border-white/20 px-5 py-2.5" data-intent="I want more booked visits">I want more visits</button>
+                <button type="button" class="intent-btn rounded-full border border-white/20 px-5 py-2.5" data-intent="I need SEO / Maps help">SEO / Maps</button>
+                <button type="button" class="intent-btn rounded-full border border-white/20 px-5 py-2.5" data-intent="Domain inquiry">Domain inquiry</button>
+              </div>
+            </div>
+          </div>
+          <form id="contact-form" class="p-8 sm:p-12" method="post" action="/api/contact" novalidate>
+            <div class="grid gap-4">
+              <div>
+                <label class="mb-1.5 block text-sm font-medium" for="cf-name">Name</label>
+                <input id="cf-name" name="name" class="field" type="text" autocomplete="name" required maxlength="120" placeholder="Dr. Jane Smith" />
+              </div>
+              <div>
+                <label class="mb-1.5 block text-sm font-medium" for="cf-email">Work email</label>
+                <input id="cf-email" name="email" class="field" type="email" autocomplete="email" required maxlength="160" placeholder="you@practice.com" />
+              </div>
+              <div>
+                <label class="mb-1.5 block text-sm font-medium" for="cf-subject">Subject</label>
+                <select id="cf-subject" name="subject" class="field" required>
+                  <option value="Growth plan request">Growth plan request</option>
+                  <option value="I want more booked visits">I want more booked visits</option>
+                  <option value="I need SEO / Maps help">SEO / Maps help</option>
+                  <option value="Domain inquiry">Domain inquiry</option>
+                </select>
+              </div>
+              <div>
+                <label class="mb-1.5 block text-sm font-medium" for="cf-message">How can we help?</label>
+                <textarea id="cf-message" name="message" class="field min-h-32" rows="5" required maxlength="5000" placeholder="Location(s), services, monthly goal — e.g. 40 extra booked consults/mo in Phoenix…"></textarea>
+              </div>
+              {/* Honeypot for bots */}
+              <div class="hidden" aria-hidden="true">
+                <label for="cf-company">Company</label>
+                <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+              <button type="submit" id="cf-submit" class="btn-primary rounded-full bg-teal-500 px-8 py-4 text-sm font-bold tracking-[0.14em] uppercase text-teal-950 transition hover:bg-teal-300 disabled:opacity-60">Send → Get Plan</button>
+              <p id="cf-status" class="min-h-6 text-sm" role="status" aria-live="polite"></p>
+              <p class="muted text-xs leading-relaxed">No spam, no robocalls. Your info stays private. Prefer email? <a class="underline" href="mailto:erg@healthcaresmarketing.com">erg@healthcaresmarketing.com</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <footer class="px-2 pb-8 pt-10 text-center">
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm" aria-label="Footer">
+          <a class="muted inline-flex min-h-12 items-center hover:underline" href="#services">Services</a>
+          <a class="muted inline-flex min-h-12 items-center hover:underline" href="#process">Process</a>
+          <a class="muted inline-flex min-h-12 items-center hover:underline" href="#insights">Insights</a>
+          <a class="muted inline-flex min-h-12 items-center hover:underline" href="#faq">FAQ</a>
+          <a class="muted inline-flex min-h-12 items-center hover:underline" href="#contact">Contact</a>
+        </nav>
+        <p class="muted mx-auto mt-4 max-w-2xl text-xs leading-relaxed sm:text-sm">
+          Information on this site is general and may change. It is not an offer of services, a commitment to deploy, or a guarantee of outcomes. References to technologies or results are based on publicly available information and are subject to change.
+        </p>
+        <p class="muted mt-3 text-xs">© {new Date().getFullYear()} Healthcares Marketing · healthcaresmarketing.com</p>
+      </footer>
+    </section>
   </main>
+
+  <!-- Exit-intent email capture (once per session, ESC to close) -->
+  <div id="exit-modal" hidden class="fixed inset-0 z-[60] items-center justify-center bg-black/70 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="exit-title">
+    <div class="surface w-full max-w-md rounded-3xl p-8 text-center">
+      <p class="text-xs tracking-[0.22em] uppercase text-teal-500">Before you go</p>
+      <h2 id="exit-title" class="mt-2 text-2xl font-semibold">Get the 2026 patient-acquisition checklist</h2>
+      <p class="muted mt-2 text-sm">The 1-page audit we use on every engagement. Free via email.</p>
+      <div class="mt-5 flex flex-col gap-2">
+        <a href="#contact" id="exit-cta" class="btn-primary rounded-full bg-teal-500 px-6 py-3.5 text-sm font-bold uppercase tracking-[0.12em] text-teal-950">Send me the checklist</a>
+        <button id="exit-close" type="button" class="inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm muted hover:underline">No thanks</button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+
+      // Theme toggle (persisted, free, no lib)
+      var themeBtn = document.getElementById('theme-toggle');
+      function syncThemeLabel() {
+        var t = root.getAttribute('data-theme') || 'dark';
+        if (themeBtn) themeBtn.setAttribute('aria-pressed', t === 'light' ? 'true' : 'false');
+        var header = document.querySelector('[data-header]');
+        if (header) {
+          if (t === 'light') {
+            header.classList.remove('bg-black/55', 'border-white/10');
+            header.classList.add('bg-white/85', 'border-slate-200');
+          } else {
+            header.classList.add('bg-black/55', 'border-white/10');
+            header.classList.remove('bg-white/85', 'border-slate-200');
+          }
+        }
+      }
+      if (themeBtn) {
+        themeBtn.addEventListener('click', function () {
+          var next = (root.getAttribute('data-theme') === 'light') ? 'dark' : 'light';
+          root.setAttribute('data-theme', next);
+          try { localStorage.setItem('hcm-theme', next); } catch (e) {}
+          syncThemeLabel();
+        });
+      }
+      syncThemeLabel();
+
+      // Mobile menu
+      var menuBtn = document.getElementById('menu-btn');
+      var menu = document.getElementById('mobile-menu');
+      if (menuBtn && menu) {
+        menuBtn.addEventListener('click', function () {
+          var open = menu.hasAttribute('hidden');
+          if (open) { menu.removeAttribute('hidden'); menu.classList.remove('hidden'); menuBtn.setAttribute('aria-expanded', 'true'); menuBtn.textContent = '✕'; }
+          else { menu.setAttribute('hidden', ''); menu.classList.add('hidden'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.textContent = '☰'; }
+        });
+        menu.querySelectorAll('a').forEach(function (a) {
+          a.addEventListener('click', function () { menu.setAttribute('hidden', ''); menu.classList.add('hidden'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.textContent = '☰'; });
+        });
+      }
+
+      // Services: search + filter
+      var search = document.getElementById('service-search');
+      var grid = document.getElementById('service-grid');
+      var empty = document.getElementById('service-empty');
+      var activeFilter = 'all';
+      function applyFilter() {
+        if (!grid) return;
+        var q = (search && search.value || '').trim().toLowerCase();
+        var visible = 0;
+        grid.querySelectorAll('article').forEach(function (card) {
+          var tags = (card.getAttribute('data-tags') || '').split(' ');
+          var hay = card.getAttribute('data-title') || '';
+          var okTag = activeFilter === 'all' || tags.indexOf(activeFilter) !== -1;
+          var okQ = !q || hay.indexOf(q) !== -1;
+          var show = okTag && okQ;
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        if (empty) empty.classList.toggle('hidden', visible !== 0);
+      }
+      document.querySelectorAll('.filter-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          activeFilter = btn.getAttribute('data-filter') || 'all';
+          document.querySelectorAll('.filter-btn').forEach(function (b) {
+            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+          applyFilter();
+        });
+      });
+      if (search) search.addEventListener('input', applyFilter);
+
+      // Intent buttons preset subject
+      var subject = document.getElementById('cf-subject');
+      document.querySelectorAll('.intent-btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var v = b.getAttribute('data-intent') || 'Growth plan request';
+          if (subject) subject.value = v;
+          document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // Contact form → /api/contact (serverless, free-plan Worker)
+      var form = document.getElementById('contact-form');
+      var status = document.getElementById('cf-status');
+      var submit = document.getElementById('cf-submit');
+      if (form) {
+        form.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+          if (status) { status.textContent = 'Sending…'; status.style.color = ''; }
+          if (submit) submit.disabled = true;
+          var data = {
+            name: document.getElementById('cf-name').value.trim(),
+            email: document.getElementById('cf-email').value.trim(),
+            subject: subject ? subject.value : 'Growth plan request',
+            message: document.getElementById('cf-message').value.trim(),
+            company: document.getElementById('cf-company').value.trim(),
+            page: location.href
+          };
+          fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(data)
+          }).then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); }).then(function (j) {
+            if (j && j.ok) {
+              if (status) { status.textContent = '✓ Received — we reply within 1 business day.'; status.style.color = '#0d9488'; }
+              form.reset();
+            } else {
+              if (status) status.textContent = (j && j.error) || 'Something went wrong — please email erg@healthcaresmarketing.com';
+            }
+          }).catch(function () {
+            if (status) status.textContent = 'Network issue — please email erg@healthcaresmarketing.com';
+          }).finally(function () { if (submit) submit.disabled = false; });
+        });
+      }
+
+      // Exit-intent (desktop mouse-out, once per session)
+      var modal = document.getElementById('exit-modal');
+      var seen = false;
+      try { seen = sessionStorage.getItem('hcm-exit') === '1'; } catch (e) {}
+      function openModal() {
+        if (seen || !modal) return;
+        seen = true;
+        try { sessionStorage.setItem('hcm-exit', '1'); } catch (e) {}
+        modal.hidden = false;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      function closeModal() {
+        if (!modal) return;
+        modal.hidden = true;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      document.addEventListener('mouseout', function (e) {
+        if (!e.relatedTarget && e.clientY <= 0) openModal();
+      });
+      var ec = document.getElementById('exit-close');
+      var ea = document.getElementById('exit-cta');
+      if (ec) ec.addEventListener('click', closeModal);
+      if (ea) ea.addEventListener('click', closeModal);
+      if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    })();
+  </script>
 </Layout>

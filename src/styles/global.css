@@ -1,102 +1,183 @@
 @import "tailwindcss";
 
-/* Custom theme tokens for mystic aesthetic */
+/* Design tokens: dark (default mystic) + light (clean clinical) */
 @theme {
   --color-void: #050505;
   --color-mist: #0a0a0f;
   --color-ember: #1a1210;
   --color-ghost: #e8e4df;
   --color-whisper: #a39e97;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-accent: #5eead4;
+  --color-accent-deep: #0d9488;
+  --color-paper: #f7fafc;
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-/* Base */
+/* Theme switching via [data-theme] — no framework JS needed */
+:root {
+  --bg: var(--color-void);
+  --bg-soft: var(--color-mist);
+  --fg: var(--color-ghost);
+  --fg-muted: var(--color-whisper);
+  --card: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --field: rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="light"] {
+  --bg: var(--color-paper);
+  --bg-soft: #ffffff;
+  --fg: var(--color-ink);
+  --fg-muted: var(--color-muted);
+  --card: #ffffff;
+  --card-border: #e2e8f0;
+  --field: #ffffff;
+}
+
+/* Base — 16px minimum, no horizontal scroll, fast text render */
 html {
-  @apply bg-[var(--color-void)] text-[var(--color-ghost)] antialiased;
+  @apply antialiased;
+  background: var(--bg);
+  color: var(--fg);
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 body {
   @apply min-h-dvh overflow-x-hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-/* Mystic image effects */
+::selection {
+  background: rgba(94, 234, 212, 0.3);
+  color: inherit;
+}
+
+/* Accessibility: visible skip link + focus */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--color-accent-deep);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Touch targets: min 48px */
+.btn-primary, .btn-ghost, .nav-link, .nav-cta {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cards / surfaces adapt to theme */
+.surface {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  transition: background-color 0.35s ease, border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+[data-theme="light"] .surface {
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.muted { color: var(--fg-muted); }
+
+/* Mystic hero effects (kept subtle + reduced-motion safe) */
 @keyframes fade-in-slow {
-  0% {
-    opacity: 0;
-    transform: scale(1.08);
-    filter: brightness(0.4) contrast(1.2) saturate(0.6);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    filter: brightness(0.85) contrast(1.05) saturate(0.75);
-  }
+  0% { opacity: 0; transform: scale(1.08); filter: brightness(0.4) contrast(1.2) saturate(0.6); }
+  100% { opacity: 1; transform: scale(1); filter: brightness(0.85) contrast(1.05) saturate(0.75); }
 }
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.35;
-  }
-  50% {
-    opacity: 0.55;
-  }
-}
-
 @keyframes drift {
-  0% {
-    transform: translate(-2%, -1%) scale(1.05);
-  }
-  50% {
-    transform: translate(1%, 2%) scale(1.08);
-  }
-  100% {
-    transform: translate(-2%, -1%) scale(1.05);
-  }
+  0% { transform: translate(-2%, -1%) scale(1.05); }
+  50% { transform: translate(1%, 2%) scale(1.08); }
+  100% { transform: translate(-2%, -1%) scale(1.05); }
 }
-
 @keyframes soft-fade {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.mystic-image {
-  animation: fade-in-slow 4.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
+.mystic-image { animation: fade-in-slow 3.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.drift-layer { animation: drift 28s ease-in-out infinite; }
+.reveal { animation: soft-fade 0.9s ease-out both; }
 
-.fog-layer {
-  animation: pulse-glow 9s ease-in-out infinite;
-}
-
-.drift-layer {
-  animation: drift 28s ease-in-out infinite;
-}
-
-.cta-reveal {
-  animation: soft-fade 2.2s ease-out 2.8s both;
-}
-
-.footer-reveal {
-  animation: soft-fade 1.8s ease-out 4s both;
-}
-
-/* Subtle noise texture via CSS (no external asset) */
 .noise {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px;
   pointer-events: none;
 }
+[data-theme="light"] .noise { opacity: 0.03; }
 
-/* Selection */
-::selection {
-  background: rgba(180, 160, 140, 0.25);
-  color: var(--color-ghost);
+/* FAQ disclosure */
+details.faq { border-radius: 1rem; }
+details.faq summary {
+  cursor: pointer;
+  list-style: none;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq[open] summary .faq-icon { transform: rotate(45deg); }
+.faq-icon { transition: transform 0.25s ease; }
+
+/* Filter buttons */
+.filter-btn[aria-pressed="true"] {
+  background: var(--color-accent-deep);
+  color: #fff;
+  border-color: transparent;
+}
+[data-theme="dark"] .filter-btn[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: #052e2b;
+}
+
+/* Form fields */
+.field {
+  background: var(--field);
+  border: 1px solid var(--card-border);
+  color: var(--fg);
+  border-radius: 0.9rem;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.field::placeholder { color: var(--fg-muted); opacity: 0.8; }
+
+/* Exit modal */
+#exit-modal[hidden] { display: none; }
+
+/* Reduced motion: kill drift/fade for speed + vestibular safety */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .mystic-image, .drift-layer, .reveal { animation: none; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
 }
