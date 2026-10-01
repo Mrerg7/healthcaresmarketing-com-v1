@@ -43,7 +43,7 @@ Header/nav, hero (visible H1 + dual CTA + trust signals), outcomes bar, filterab
 
 Production target: **https://healthcaresmarketing.com**
 
-CTA routes to: `erg@healthcaresmarketing.com`
+CTA routes to: `sales@desertrich.com`
 
 ## Notes
 
