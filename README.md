@@ -33,7 +33,7 @@ npm run deploy
 npx wrangler deploy
 ```
 
-`wrangler.toml` serves Static Assets with a small Worker that 301-redirects `www` → apex and returns a real `404.html` for missing paths. The Worker also serves the `/api/*` endpoints (same deploy, no extra cost).
+`wrangler.toml` serves Static Assets with a small Worker that 301-redirects `www` → apex, serves homepage section aliases (`/services`, `/contact`, …) at 200 with an apex canonical (avoids Search Console “Not found (404)” on guessed URLs), and returns a real `404.html` for unknown paths. Ships `/favicon.ico` + apple-touch icons so crawlers do not 404 on default icon requests. The Worker also serves the `/api/*` endpoints (same deploy, no extra cost).
 
 ## Pages / sections (single-page, anchor-nav)
 

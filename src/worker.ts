@@ -3,13 +3,30 @@
  * Free-plan safe: no KV/D1/R2, no external fetch, pure request handling.
  *
  * - www → apex 301, http → https, /index.html aliases served at 200
- * - Real 404 (no soft-404), noindex on 404
+ * - Single-page section paths (/services, /contact, …) served as homepage
+ *   at 200 with apex canonical (stops GSC "Not found (404)" on guessed URLs)
+ * - Real 404 (no soft-404), noindex on 404 — no Link canonical on errors
  * - Security headers on HTML, immutable caching on hashed assets
  * - POST /api/contact (validated, honeypot, size-capped) + GET /api/health
  */
 const CANONICAL_HOST = 'healthcaresmarketing.com';
 const CANONICAL_ORIGIN = `https://${CANONICAL_HOST}`;
 const HOME_CANONICAL = `${CANONICAL_ORIGIN}/`;
+
+/** Paths that are homepage sections (anchor-nav SPA) — not separate pages. */
+const HOME_SECTION_ALIASES = new Set([
+  'about',
+  'contact',
+  'faq',
+  'home',
+  'insights',
+  'pricing',
+  'privacy',
+  'process',
+  'results',
+  'services',
+  'terms',
+]);
 
 interface Env {
   ASSETS: Fetcher;
@@ -28,7 +45,13 @@ function directoryPath(pathname: string): string {
 }
 
 function isHomeAlias(pathname: string): boolean {
-  return pathname === '/' || pathname === '' || /^\/index(\.html)?\/?$/i.test(pathname);
+  if (pathname === '/' || pathname === '' || /^\/index(\.html)?\/?$/i.test(pathname)) {
+    return true;
+  }
+  // /services, /services/, /contact.html → homepage (single-page site)
+  const match = pathname.match(/^\/([a-z0-9-]+)(?:\.html)?\/?$/i);
+  if (!match) return false;
+  return HOME_SECTION_ALIASES.has(match[1].toLowerCase());
 }
 
 function isNotFoundPath(pathname: string): boolean {
@@ -36,7 +59,10 @@ function isNotFoundPath(pathname: string): boolean {
 }
 
 function offHostCanonicalLocation(requestUrl: URL, host: string, proto: string): string | null {
-  const needsHttps = proto === 'http' || requestUrl.protocol === 'http:';
+  // Prefer the resolved proto (x-forwarded-proto in production / local tunnels).
+  // Do not also key off requestUrl.protocol — wrangler local URLs stay http: even
+  // when the logical request is already HTTPS via forwarded headers.
+  const needsHttps = proto === 'http';
   const needsApex = host === `www.${CANONICAL_HOST}` || host.endsWith('.workers.dev');
   if (!needsHttps && !needsApex && host === CANONICAL_HOST) return null;
   const next = new URL(requestUrl.toString());
@@ -75,13 +101,22 @@ function securityHeaders(): Headers {
   return h;
 }
 
-function applyHtmlHeaders(base: Headers, opts: { noindex?: boolean } = {}): Headers {
+function applyHtmlHeaders(
+  base: Headers,
+  opts: { noindex?: boolean; canonical?: boolean } = {},
+): Headers {
   const headers = new Headers(base);
   const sec = securityHeaders();
   sec.forEach((v, k) => headers.set(k, v));
-  headers.set('Link', `<${HOME_CANONICAL}>; rel="canonical"`);
+  // Never advertise a homepage canonical on real 404 responses — that confuses crawlers.
+  if (opts.canonical !== false && !opts.noindex) {
+    headers.set('Link', `<${HOME_CANONICAL}>; rel="canonical"`);
+  }
   headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
-  if (opts.noindex) headers.set('X-Robots-Tag', 'noindex, nofollow');
+  if (opts.noindex) {
+    headers.delete('Link');
+    headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
   return headers;
 }
 
@@ -156,9 +191,18 @@ export default {
     if (url.pathname === '/api/health' && request.method === 'GET') {
       return json({ ok: true, host: CANONICAL_HOST, time: new Date().toISOString() });
     }
-    if (url.pathname === '/api/contact' && request.method === 'POST') {
-      // CORS: same-origin only; preflight not needed but handle gracefully
-      return handleContact(request);
+    if (url.pathname === '/api/contact') {
+      if (request.method === 'POST') return handleContact(request);
+      // Form action URL is discoverable — do not report as a missing HTML page.
+      const headers = securityHeaders();
+      headers.set('Allow', 'POST');
+      headers.set('content-type', 'application/json; charset=utf-8');
+      headers.set('Cache-Control', 'no-store');
+      headers.set('X-Robots-Tag', 'noindex, nofollow');
+      return new Response(JSON.stringify({ ok: false, error: 'Use POST.' }), {
+        status: 405,
+        headers,
+      });
     }
     if (url.pathname.startsWith('/api/')) {
       return json({ ok: false, error: 'Not found.' }, 404);
